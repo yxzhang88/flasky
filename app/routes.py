@@ -1,8 +1,20 @@
 from flask import Blueprint, jsonify
 
-hello_world_bp = Blueprint("hello_world", __name__)
 dog_bp = Blueprint("dog", __name__,url_prefix="/dogs")
+cat_bp = Blueprint("cat", __name__,url_prefix="/cats")
 
+class Cat:
+    def __init__(self, id, name, color, personality):
+        self.id = id
+        self.name = name
+        self.color = color
+        self.personality = personality
+
+cats = [
+    Cat(1, "Muna", "black", "mischevious"),
+    Cat(2, "Matthew", "spotted", "cuddly"),
+    Cat(3, "George", "Gray","Sassy")
+]
 
 class Dog:
     def __init__(self, id, name, breed, tricks=None):
@@ -15,7 +27,7 @@ class Dog:
 
     def to_json(self):
         if not self.tricks:
-            tricks = "NO Tricks"
+            tricks = "No Tricks"
         else:
             tricks = self.tricks
 
@@ -23,22 +35,21 @@ class Dog:
                 "id": self.id,
                 "name": self.name,
                 "breed": self.breed,
-   
                 "tricks": tricks
             }
 
 dogs = [
     Dog(1, "mac", "greyhound"),
     Dog(2, "sparky", "schnauzer"),
-    Dog(3, "teddy", "golden retriever")
+    Dog(3, "teddy", "golden retriever", ["dance"])
 ]
+# get all cats
+@cat_bp.route("", methods=["GET"])
+def handle_cats():
+    cats_response = [vars(cat) for cat in cats]
+    return jsonify(cats_response)
 
-
-
-@hello_world_bp.route("/hello-world", methods=["GET"])
-def hello_world():
-    return "hello world!"
-
+# get all dogs
 @dog_bp.route("", methods=["GET"])
 def handle_dogs():
     dogs_response = []
@@ -57,6 +68,7 @@ def handle_dogs():
 
 @dog_bp.route("/<dog_id>", methods=["GET"])
 def handle_dog(dog_id):
+    print(dog_id)
     dog_id = int(dog_id)
     for dog in dogs:
         if dog.id == dog_id:
@@ -67,3 +79,5 @@ def handle_dog(dog_id):
             #     "tricks": dog.tricks
             # }
             return dog.to_json()
+
+    return {"error": "Dog not found"}, 404
