@@ -63,11 +63,12 @@ def add_bike():
 def get_all_bikes():
     # query 
     name_param = request.args.get("name")
+
     if name_param is None:
         bikes = Bike.query.all()
     else:
         bikes = Bike.query.filter_by(name=name_param)
-        
+
     response = []
     for bike in bikes:
         bike_dict = {
@@ -120,18 +121,19 @@ def get_one_bike(bike_id):
         "size": chosen_bike.size,
         "type": chosen_bike.type
     }
-    return jsonify(chosen_bike), 200
+    return jsonify(bike_dict), 200
 
 
 @bike_bp.route("/<bike_id>", methods=["PUT"])
 def update_bike_with_new_val(bike_id):
     chosen_bike = get_one_bike_or_abort(bike_id)
     request_body = request.get_json()
+
     if "name" not in request_body or \
        "size" not in request_body or \
        "price" not in request_body or \
        "type" not in request_body:
-        return jsonify({"message": " Request must include name, size, price, and type"})
+        return jsonify({"message": "Request must include name, size, price, and type"})
 
     chosen_bike.name = request_body["name"]
     chosen_bike.name = request_body["size"]
@@ -140,7 +142,7 @@ def update_bike_with_new_val(bike_id):
 
     db.session.commit()
 
-    return jsonify({f"message": "Successfully replace bike with id {bike_id}"}, 200)
+    return jsonify({"message": f"Successfully replaced bike with id {bike_id}"}, 200)
 
 
 @bike_bp.route("/<bike_id>", methods=["DELETE"])
@@ -148,6 +150,6 @@ def delete_one_bike(bike_id):
     chosen_bike = get_one_bike_or_abort(bike_id)
     db.session.delete(chosen_bike)
     db.session.commit()
-    return jsonify({f"message": "Successfully delete bike with id {bike_id}"}, 200)
+    return jsonify({"message": f"Successfully deleted bike with id {bike_id}"}, 200)
 
 
