@@ -22,7 +22,7 @@ def create_app(testing=None):
 
 
     # psycopg2 is a python library
-    # The last part /bikes_development will be change what your database name it is (edited) 
+    # The last part /bikes_development will be change what your database name it is 
     
     from app.models.bike import Bike
 
