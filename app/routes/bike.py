@@ -37,7 +37,7 @@ def get_one_bike_or_abort(bike_id):
 
     if not matching_bike:
         response_str = f"Bike ID: '{bike_id}' was not found in the database"
-        abort(make_response(jsonify({"message":response_str}), 400))
+        abort(make_response(jsonify({"message":response_str}), 404))
     
     return matching_bike
 
