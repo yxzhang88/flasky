@@ -19,18 +19,20 @@ def create_app(testing=None):
         app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get("SQLALCHEMY_DATABASE_URI")
     else:
         app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get("SQLALCHEMY_TEST_DATABASE_URI")
-
-
     # psycopg2 is a python library
     # The last part /bikes_development will be change what your database name it is 
     
+
     from app.models.bike import Bike
 
     db.init_app(app)
     migrate.init_app(app, db)
     # (method) init_app
 
-    from app.routes.bike import bike_bp
+    from .routes.bike import bike_bp
     app.register_blueprint(bike_bp)
+
+    from .routes.cyclist import cyclist_bp
+    app.register_blueprint(cyclist_bp)
 
     return app
