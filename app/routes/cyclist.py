@@ -87,7 +87,7 @@ def get_all_bikes_belonging_to_a_cyclist(cyclist_id):
 
 
 @cyclist_bp.route("/<cyclist_id>/bike", methods=["POST"])
-ng_to_a_cyclist(cyclist_id):
+def post_bike_belonging_to_a_cyclist(cyclist_id):
     parent_cyclist = get_one_bike_or_abort(Cyclist, cyclist_id)
 
     request_body = request.get_json()
